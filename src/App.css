@@ -13,6 +13,22 @@
   }
 }
 
+.card-img-top {
+  border: 4px solid #f0f0f0;
+}
+
+.hover-link:hover {
+  color: #0d6efd !important;
+  transition: all 0.3s;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.navbar-brand {
+  font-family: 'Segoe Script', cursive;
+  letter-spacing: 1px;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
