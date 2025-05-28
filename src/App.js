@@ -11,6 +11,9 @@ import { CartProvider } from './context/CartContext';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderSummary from './pages/OrderSummary';
 import MyOrdersPage from './pages/MyOrdersPage';
+import AdminPage from './pages/AdminPage';
+import AddShopPage from './pages/AddShopPage';
+import DeleteShopPage from './pages/DeleteShopPage';
 
 function App() {
   return (
@@ -27,6 +30,9 @@ function App() {
             <Route path='/checkout' element={<CheckoutPage />} />
             <Route path="/order-summary" element={<OrderSummary />} />
             <Route path='/myorders' element={<MyOrdersPage />} />
+            <Route path='/admin' element={<AdminPage />} />
+            <Route path='/addshop' element={<AddShopPage />} />
+            <Route path='/deleteshop' element={<DeleteShopPage/>} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>
