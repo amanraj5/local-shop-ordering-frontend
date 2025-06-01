@@ -33,6 +33,8 @@ function App() {
             <Route path='/admin' element={<AdminPage />} />
             <Route path='/addshop' element={<AddShopPage />} />
             <Route path='/deleteshop' element={<DeleteShopPage/>} />
+            <Route path='/deleteproduct' element={<DeleteShopPage />} />
+            <Route path='/addproduct' element={<AddShopPage />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

@@ -3,8 +3,8 @@ import AdminBackground from '../assets/admin-background.jpg';
 import { Link } from 'react-router-dom';
 const AdminPage = () => {
     const tasks = [
-        { label: "Add Product", link: "#" },
-        { label: "Delete Product", link: "#" },
+        { label: "Add Product", link: "/addproduct" },
+        { label: "Delete Product", link: "/deleteproduct" },
         { label: "Add Shop", link: "/addshop" },
         { label: "Delete Shop", link: "/deleteshop" },
     ];

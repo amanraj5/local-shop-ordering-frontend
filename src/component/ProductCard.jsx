@@ -13,13 +13,15 @@ const ProductCard = ({ id, name, description, price, imageUrl }) => {
         setShowToast(true);
     }
 
+    console.log("Image URL:", imageUrl);
+    console.log("Product Name:", name);
     return (
         <div className="card mb-4 shadow" style={{ maxWidth: "700px", margin: "auto" }}>
             <div className="row g-0">
                 {/* Product Image */}
                 <div className="col-md-4">
                     <img
-                        src={imageUrl}
+                        src={imageUrl?.startsWith("http") ? imageUrl : `data:image/jpeg;base64,${imageUrl}`}
                         className="img-fluid rounded-start"
                         alt={name}
                         style={{ height: "100%", objectFit: "cover" }}
