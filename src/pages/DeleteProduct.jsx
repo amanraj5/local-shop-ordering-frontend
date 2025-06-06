@@ -65,11 +65,10 @@ const DeleteShopPage = () => {
                 setRemarks('');
             } else {
                 const errorData = await response.json();
-                setToastMessage(`❌ Deletion failed: ${errorData.message || 'Check your credentials or input'}`);
+                setToastMessage(`❌ Deletion failed: ${errorData.message}`);
                 setHeader("Deletion Failed ❌");
                 setBackground("danger");
                 setShowToast(true);
-                // alert(`❌ Deletion failed: ${errorData.message || 'Check your credentials or input'}`);
             }
         } catch (error) {
             setToastMessage("❌ Something went wrong while deleting the product.");

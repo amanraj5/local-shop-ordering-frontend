@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ShopBg from '../assets/shop-BG.jpg';
 
 const AddShopPage = () => {
     const [name, setName] = useState('');
-    const [rating, setRating] = useState('');
+    const [price, setPrice] = useState();
     const [description, setDescription] = useState('');
     const [image, setImage] = useState(null);
+    const [shops, setShops] = useState([]);
+    const [selectedShop, setSelectedShop] = useState('');
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -14,36 +16,47 @@ const AddShopPage = () => {
         }
     };
 
+    useEffect(() => {
+        fetch("http://localhost:8080/api/shops")
+            .then((response) => response.json())
+            .then((data) => {
+                setShops(data);
+            })
+            .catch((error) => console.error("Error fetching data:", error));
+    }, []);
 
+    console.log(shops);
     const handleSubmit = async (e) => {
-    e.preventDefault();
+        e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("rating", rating);
-    formData.append("description", description);
-    formData.append("image", image); // Note: image here must be a File object
+        const formData = new FormData();
+        formData.append("shopId", selectedShop)
+        formData.append("name", name);
+        formData.append("price", price);
+        formData.append("description", description);
+        formData.append("image", image);
 
-    try {
-        const response = await fetch('http://localhost:8080/api/addShop', {
-            method: 'POST',
-            body: formData,
-        });
+        try {
+            const response = await fetch('http://localhost:8080/api/products/addProduct', {
+                method: 'POST',
+                body: formData,
+            });
 
-        if (response.ok) {
-            alert('✅ Shop added successfully!');
-            setName('');
-            setRating('');
-            setDescription('');
-            setImage('');
-        } else {
-            alert('❌ Failed to add shop.');
+            if (response.ok) {
+                alert('✅ Shop added successfully!');
+                setSelectedShop('');
+                setName('');
+                setPrice('');
+                setDescription('');
+                setImage('');
+            } else {
+                alert('❌ Failed to add shop.');
+            }
+        } catch (error) {
+            console.error('Error adding shop:', error);
+            alert('❌ Something went wrong.');
         }
-    } catch (error) {
-        console.error('Error adding shop:', error);
-        alert('❌ Something went wrong.');
-    }
-};
+    };
 
 
     return (
@@ -52,13 +65,26 @@ const AddShopPage = () => {
                 <h3 className="mb-4 text-center text-success fw-bold">Add New Shop</h3>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
-                        <label className="form-label">Shop Name</label>
+                        <label className="form-label">Select Shop</label>
+                        <select
+                            className="form-select"
+                            value={selectedShop}
+                            onChange={(e) => setSelectedShop(e.target.value)}
+                            required
+                        >
+                            <option value="">-- Choose a shop --</option>
+                            {shops.map((shop, index) => (
+                                <option key={index} value={shop.id}>{shop.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="mb-3">
+                        <label className="form-label">Product Name</label>
                         <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} required />
                     </div>
-
                     <div className="mb-3">
-                        <label className="form-label">Rating</label>
-                        <input type="number" step="0.1" className="form-control" value={rating} onChange={(e) => setRating(e.target.value)} required />
+                        <label className="form-label">Price</label>
+                        <input type="number" step="0.1" className="form-control" value={price} onChange={(e) => setPrice(e.target.value)} required />
                     </div>
 
                     <div className="mb-3">
