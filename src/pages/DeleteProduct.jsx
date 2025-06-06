@@ -5,14 +5,16 @@ import ToastMessage from '../component/Toast';
 
 const DeleteShopPage = () => {
     const [selectedShop, setSelectedShop] = useState('');
+    const [selectedProduct, setSelectedProduct] = useState('');
     const [adminPassword, setAdminPassword] = useState('');
     const [remarks, setRemarks] = useState('');
     const [shops, setShops] = useState([]);
+    const [products, setProducts] = useState([]);
 
 
     const [showToast, setShowToast] = useState(false);
-    const [toastMessage, setToastMessage] = useState("Shop deleted successfully!");
-    const [header, setHeader] = useState("Shop Deleted ✅");
+    const [toastMessage, setToastMessage] = useState("Product deleted successfully!");
+    const [header, setHeader] = useState("Product Deleted ✅");
     const [background, setBackground] = useState("success");
     useEffect(() => {
         fetch("http://localhost:8080/api/shops")
@@ -24,17 +26,29 @@ const DeleteShopPage = () => {
     }, []);
 
 
+    useEffect(() => {
+        if (selectedShop) {
+            fetch(`http://localhost:8080/api/products/shops/${selectedShop}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    setProducts(data);
+                })
+                .catch((error) => console.error("Error fetching products:", error));
+        }
+    }, [selectedShop])
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const response = await fetch(`http://localhost:8080/api/shops/${selectedShop}`, {
+            const response = await fetch(`http://localhost:8080/api/products/deleteProduct/${selectedProduct}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     shopName: selectedShop,
+                    productName: selectedProduct,
                     adminPassword,
                     remarks,
                 }),
@@ -42,10 +56,11 @@ const DeleteShopPage = () => {
 
             if (response.ok) {
                 // alert('✅ Shop deleted successfully');
-                // setToastMessage("✅ Shop deleted successfully");
+                setToastMessage("✅ Product deleted successfully");
                 setShowToast(true);
-                setShops((prevShops) => prevShops.filter(shop => shop.id !== selectedShop));
+                setShops((prevProduct) => prevProduct.filter(product => product.id !== selectedProduct));
                 setSelectedShop('');
+                setSelectedProduct('');
                 setAdminPassword('');
                 setRemarks('');
             } else {
@@ -57,11 +72,11 @@ const DeleteShopPage = () => {
                 // alert(`❌ Deletion failed: ${errorData.message || 'Check your credentials or input'}`);
             }
         } catch (error) {
-            setToastMessage("❌ Something went wrong while deleting the shop.");
+            setToastMessage("❌ Something went wrong while deleting the product.");
             setHeader("Error ❌");
             setBackground("danger");
             setShowToast(true);
-            console.error('Error deleting shop:', error);
+            console.error('Error deleting product:', error);
             // alert('❌ Something went wrong while deleting the shop.');
         }
     };
@@ -72,7 +87,7 @@ const DeleteShopPage = () => {
 
         <div className="delete-shop-wrapper d-flex justify-content-center align-items-center" style={{ backgroundImage: `url(${ShopBg})` }}>
             <div className="card p-4 shadow-lg rounded-4" style={{ maxWidth: '500px', width: '100%', opacity: 0.95 }}>
-                <h3 className="mb-4 text-center text-danger fw-bold">Delete Shop</h3>
+                <h3 className="mb-4 text-center text-danger fw-bold">Delete Product</h3>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <label className="form-label">Select Shop</label>
@@ -88,16 +103,19 @@ const DeleteShopPage = () => {
                             ))}
                         </select>
                     </div>
-
                     <div className="mb-3">
-                        <label className="form-label">Admin Password</label>
-                        <input
-                            type="password"
-                            className="form-control"
-                            value={adminPassword}
-                            onChange={(e) => setAdminPassword(e.target.value)}
+                        <label className="form-label">Select Product</label>
+                        <select
+                            className="form-select"
+                            value={selectedProduct}
+                            onChange={(e) => setSelectedProduct(e.target.value)}
                             required
-                        />
+                        >
+                            <option value="">-- Choose a product --</option>
+                            {products.map((product, index) => (
+                                <option key={index} value={product.id}>{product.name}</option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className="mb-3">

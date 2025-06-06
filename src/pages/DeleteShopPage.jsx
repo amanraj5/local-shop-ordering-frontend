@@ -90,17 +90,6 @@ const DeleteShopPage = () => {
                     </div>
 
                     <div className="mb-3">
-                        <label className="form-label">Admin Password</label>
-                        <input
-                            type="password"
-                            className="form-control"
-                            value={adminPassword}
-                            onChange={(e) => setAdminPassword(e.target.value)}
-                            required
-                        />
-                    </div>
-
-                    <div className="mb-3">
                         <label className="form-label">Remarks</label>
                         <textarea
                             className="form-control"

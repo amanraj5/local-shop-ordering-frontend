@@ -14,6 +14,8 @@ import MyOrdersPage from './pages/MyOrdersPage';
 import AdminPage from './pages/AdminPage';
 import AddShopPage from './pages/AddShopPage';
 import DeleteShopPage from './pages/DeleteShopPage';
+import DeleteProduct from './pages/DeleteProduct';
+import AddProduct from './pages/AddProduct';
 
 function App() {
   return (
@@ -33,8 +35,8 @@ function App() {
             <Route path='/admin' element={<AdminPage />} />
             <Route path='/addshop' element={<AddShopPage />} />
             <Route path='/deleteshop' element={<DeleteShopPage/>} />
-            <Route path='/deleteproduct' element={<DeleteShopPage />} />
-            <Route path='/addproduct' element={<AddShopPage />} />
+            <Route path='/deleteproduct' element={<DeleteProduct />} />
+            <Route path='/addproduct' element={<AddProduct />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>
