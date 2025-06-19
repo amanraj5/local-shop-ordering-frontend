@@ -62,7 +62,9 @@ const Login = () => {
             });
 
             if (response.ok) {
-                login(email);
+                const data = await response.json();
+                localStorage.setItem('token', data.token);
+                login(data.email);
                 setShowToast(true);
                 navigate('/');
             } else {
