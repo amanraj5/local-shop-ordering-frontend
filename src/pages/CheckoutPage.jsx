@@ -14,12 +14,12 @@ const CheckoutPage = () => {
     const navigate = useNavigate();
 
     const [toastMessage, setToastMessage] = useState("Your order has been placed successfully!")
-    const [header,setHeader] = useState("Order Placed ✅");
+    const [header, setHeader] = useState("Order Placed ✅");
     const [background, setBackround] = useState("primary");
 
     const totalAmount = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-    console.log("Email", userEmail);
+    // console.log("Email", userEmail);
     const handleInputChange = (e) => {
         setUser(prev => ({ ...prev, [e.target.name]: e.target.value }));
     };
@@ -53,7 +53,6 @@ const CheckoutPage = () => {
             setLoading(false);
             return;
         }
-        // console.log("Order Request:", orderRequest); 
         try {
             const response = await fetch('http://localhost:8080/api/placeorder', {
                 method: 'POST',
@@ -67,18 +66,16 @@ const CheckoutPage = () => {
             const data = await response.json();
             clearCart();
             setShowToast(true);
-            // navigate('/'); // redirect home or to success page
 
             setTimeout(() => {
                 navigate('/order-summary', { state: { orderDetails: data } });
             }, 1500);
         } catch (error) {
             console.error("Order Error:", error);
-            toastMessage("Failed to place order. Please try again.");
+            setToastMessage("Failed to place order. Please try again.");
             setHeader("Notification ❗");
             setBackround("danger");
             setShowToast(true);
-            // alert("Failed to place order");
         } finally {
             setLoading(false);
         }

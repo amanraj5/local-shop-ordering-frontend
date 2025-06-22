@@ -32,7 +32,8 @@ const Login = () => {
             });
 
             if (response.ok) {
-                login(email);
+                const data = response.json();
+                login(data.email, data.token);
                 setShowToast(true);
                 navigate('/admin');
             } else {
@@ -61,14 +62,17 @@ const Login = () => {
                 })
             });
 
-            if (response.ok) {
-                const data = await response.json();
+            const data = await response.json();
+            console.log("Login Response:", data); // Debugging
+
+            if (response.ok && data.token) {
                 localStorage.setItem('token', data.token);
+                localStorage.setItem('userEmail', data.email);
                 login(data.email);
-                setShowToast(true);
+                setShowToast(true); 
                 navigate('/');
             } else {
-                setMessage('Invalid email or password');
+                setMessage(data.message || 'Invalid login');
             }
         } catch (error) {
             console.error('Error:', error);

@@ -12,28 +12,40 @@ export const AuthProvider = ({ children }) => {
 
     const login = (email) => {
         localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userEmail', email); 
         setIsLoggedIn(true);
         setUserEmail(email);
     };
 
-    // Fetched the token from localStorage
-    const token = localStorage.getItem("token");
 
-    // Checking if token is there
-    if (token) {
-        // Decoding the token by using the method of jwt-decode
-        const decoded = jwtDecode(token);
-        const currentTime = Date.now() / 1000; // in seconds
 
-        // Checking the condition if the decoded time from the token is less than the current time then navigate to login and remove the token from local storage
-        if (decoded.exp < currentTime) {
-            // Token expired
-            localStorage.removeItem("token");
-            window.location.href = "/login"; 
-            // navigate("\login");
+    useEffect(() => {
+        const storedToken = localStorage.getItem("token");
+
+        if (storedToken) {
+            try {
+                const decoded = jwtDecode(storedToken);
+                const currentTime = Date.now() / 1000;
+
+                if (decoded.exp < currentTime) {
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("userEmail");
+                    localStorage.removeItem("isLoggedIn");
+                    window.location.href = "/login";
+                }
+            } catch (err) {
+                console.error("Invalid token:", err);
+                localStorage.removeItem("token");
+                window.location.href = "/login";
+            }
         }
-    }
+
+        const storedEmail = localStorage.getItem("userEmail");
+        if (storedEmail) {
+            setUserEmail(storedEmail);
+        }
+    }, []);
+
 
 
     const logout = () => {
